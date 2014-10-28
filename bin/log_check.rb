@@ -11,3 +11,10 @@
 #Done
 #Nothing
 
+#Now include the config and a loop to include the matchers that we need.
+require_relative '../etc/config'
+MATCHERS.each do |location|
+	require_relative MATCHERLOC+location
+end
+puts TEST
+puts ONE
