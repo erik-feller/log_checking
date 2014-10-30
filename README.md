@@ -1,4 +1,4 @@
-nagios-swatch-plug
+log_checking
 ==================
 
-A nagios extension that allows for flexible monitoring of various logs produced
+A ruby script intended to be wrapped for nagios that can be extended using matcher scripts to log and alert any event. 
