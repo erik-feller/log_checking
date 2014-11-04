@@ -4,6 +4,7 @@
 #Version 0.10
 #################################################################################
 #To Do
+#Basic Functionality
 #Add ability to skip old logs
 #Add ability to give first run flag so that the whole log isn't read.
 #Add ability to have single and multi line running modes. 
@@ -23,8 +24,8 @@ LOGFILES = LOGS.keys
 #This part mostly taken from the old branch
 class Log
 	def initialize(file, oldFile)
-		@file = file
-		@oldfile = oldFile
+		@file = file #this is the log file to be scanned	
+		@oldfile = oldFile #this is the old file to compare the new one to. if theyre the same then 
 		@exitCode
 		@@max = 10**8
 		@@matchersize = 10**6
