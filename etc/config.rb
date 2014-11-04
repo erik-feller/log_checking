@@ -9,6 +9,6 @@ MATCHERS = ['example1'] #Class defined in these files should have the same name 
 
 #define logs and log location
 #Might change this mechanic. All the logs might not be in the same spot
-LOGLOC = '/var/logs/'
+LOGLOC = '/var/log/'
 LOGS = {'sudo.log' => ['example1', 'example2'], 'kern.log' => ['example1']}
 

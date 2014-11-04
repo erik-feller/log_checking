@@ -21,49 +21,50 @@ end
 LOGFILES = LOGS.keys
 #Now define a class log, each log has matchers that it runs defined in config 
 #This part mostly taken from the old branch
-#class Log
-#	def initialize(file, oldFile)
-#		@file = file
-#		@oldfile = oldFile
-#		@exitCode
-#		@@max = 10**8
-#		@@matchersize = 10**6
-#	end
-#	
-#	def new?
-#		if File.exist?(@oldFile)
-#			first = File.open(@file, &:gets)
-#			firstOld = File.open(@oldFile, &:gets)
-#			first != firstOld
-#		else
-#			true
-#		end
-#	end
-#
-#	def run(matcher)
-#		if new?
-#			File.open(@oldFile,'w'){|handle| handle.write('')}
-#		end
-#		while size > 0
-#			read(matcher)
-#		end
-#	end
-#
-#	def size
-#		File.size?(@file).to_i - File.size?(@oldFile).to_i
-#	end
-#
-#	def read(matcher)
-#		handle = File.new(@file)
-#		handle.sysseek(File.size?(@oldFile).to_i)
-#		content = handle.sysread(@@max)
-#		handle.sysseek(@@matchersize, IO::SEEK_CUR)
-#		File.open(@oldFile, 'a'){|handle| handle.write(content)}
-#		puts matcher.match(content)
-#	end
-#end
+class Log
+	def initialize(file, oldFile)
+		@file = file
+		@oldfile = oldFile
+		@exitCode
+		@@max = 10**8
+		@@matchersize = 10**6
+	end
+	
+	def new?
+		if File.exist?(@oldFile)
+			first = File.open(@file, &:gets)
+			firstOld = File.open(@oldFile, &:gets)
+			first != firstOld
+		else
+			true
+		end
+	end
+
+	def run(matcher)
+		if new?
+			File.open(@oldFile,'w'){|handle| handle.write('')}
+		end
+		while size > 0
+			read(matcher)
+		end
+	end
+
+	def size
+		File.size?(@file).to_i - File.size?(@oldFile).to_i
+	end
+
+	def read(matcher)
+		handle = File.new(@file)
+		handle.sysseek(File.size?(@oldFile).to_i)
+		content = handle.sysread(@@max)
+		handle.sysseek(@@matchersize, IO::SEEK_CUR)
+		File.open(@oldFile, 'a'){|handle| handle.write(content)}
+		puts matcher.match(content)
+	end
+end
 
 #Now iterate through each log. Chunk it and apply the matchers to the log each time. 
 LOGFILES.each do |log|
 		puts log
+		puts LOGLOC + log
 end
