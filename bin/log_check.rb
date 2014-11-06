@@ -50,10 +50,12 @@ class Log
 		end
 	end
 
+	#Method to determine the size of the new log
 	def size
 		File.size?(@file).to_i - File.size?(@oldFile).to_i
 	end
 
+	#Read the file into the matcher. 
 	def read(matcher)
 		handle = File.new(@file)
 		handle.sysseek(File.size?(@oldFile).to_i)
