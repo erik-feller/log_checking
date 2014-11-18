@@ -1,7 +1,6 @@
-require_relative 'matcher'
-require_relative '../etc/trusted_users'
+require_relative '../etc/sudoconfig'
 
-class SudoMatcher < Matcher
+class Sudomatcher 
 	def self.match(string)
         results = Array.new
         string.split("\n").each do |line|
