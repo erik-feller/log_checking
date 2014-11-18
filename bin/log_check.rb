@@ -70,4 +70,10 @@ end
 LOGFILES.each do |log|
 		puts log
 		puts LOGLOC + log
+		puts LOGLOC + log + '.old'
+		currentLog = Log.new(LOGLOC + log, LOGLOC + log + '.old')
+		matchers = LOGS[log]
+		matchers.each do |matcher|
+				currentLog.run(matcher)
+		end
 end
