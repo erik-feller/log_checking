@@ -25,7 +25,9 @@ LOGFILES = LOGS.keys
 class Log
 	def initialize(file, oldFile)
 		@file = file #this is the log file to be scanned	
-		@oldfile = oldFile #this is the old file to compare the new one to. if theyre the same then 
+		@oldFile = oldFile #this is the old file to compare the new one to. if theyre the same then 
+		puts @file
+		puts @oldFile
 		@exitCode
 		@@max = 10**8
 		@@matchersize = 10**6

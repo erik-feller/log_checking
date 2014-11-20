@@ -17,7 +17,6 @@ TRUSTED_USERS = {
 #For a partially trusted users list, usernames should index to an array of trusted machines in the hash below. 
 PTU= {
    'dotoXXXX' => ['nicot'],
-   'erfe5132' => ['example'],
    'zado5040' => ['enf'],
 }
 

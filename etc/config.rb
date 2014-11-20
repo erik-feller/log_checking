@@ -10,5 +10,5 @@ MATCHERS = ['sudomatcher'] #Class defined in these files should have the same na
 #define logs and log location
 #Might change this mechanic. All the logs might not be in the same spot
 LOGLOC = '/var/log/'
-LOGS = {'sudo.log' => ['example1', 'sudomatcher'], 'kern.log' => ['example1']}
+LOGS = {'sudo.log' => ['sudomatcher'], }
 
