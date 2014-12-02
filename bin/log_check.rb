@@ -1,16 +1,16 @@
-#Script to open logs, parse and chunk them, and apply matcher programs. No matching is done in this script. This script will return 
-#Configurable through ../etc/config
 #Extensions should be in ../bin and have their config files in ../etc/
-#Version 0.10
+#Version 0.20
 #################################################################################
 #To Do
 #Basic Functionality
-#Add ability to skip old logs
+#Add ability to skip old logs on the first run.
 #Add ability to give first run flag so that the whole log isn't read.
 #Add ability to have single and multi line running modes. 
 #Standard format for input into the extension functions. 
 #Done
-#Nothing
+#Can parse through logs and chunk to size
+#Basic functionality, can run matchers for each log selected. Check config in ../etc
+
 
 #Now include the config and a loop to include the matchers that we need.
 require_relative '../etc/config'
@@ -29,8 +29,8 @@ class Log
 		puts @file
 		puts @oldFile
 		@exitCode
-		@@max = 10**8
-		@@matchersize = 10**6
+		@@max = 10**4
+		@@matchersize = 10**2
 	end
 	
 	def new?
@@ -62,6 +62,9 @@ class Log
 		handle = File.new(@file)
 		handle.sysseek(File.size?(@oldFile).to_i)
 		content = handle.sysread(@@max)
+		puts content
+		result = gets
+		puts '++++++++++++++++++++++++++++++++++++++++++++'
 		handle.sysseek(@@matchersize, IO::SEEK_CUR)
 		File.open(@oldFile, 'a'){|handle| handle.write(content)}
 		puts matcher.match(content)

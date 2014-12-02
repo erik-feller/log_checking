@@ -8,6 +8,7 @@ class Sudomatcher
             	user = line.split(/\s+/)[5].strip #The fifth entry in the sudo log is the username
 		host = line.split(/\s+/)[3].strip #The third entry in the sudo log is the hostname
 		#Now check to see if this user is trusted on all hosts
+			puts line unless TRUSTED_USERS.include? user
         	results << line unless TRUSTED_USERS.include? user
 
 		#Now check to see if this user is trusted on this machine specifically
