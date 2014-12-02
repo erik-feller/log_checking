@@ -2,7 +2,7 @@
 #Version 0.20
 #################################################################################
 #To Do
-#Basic Functionality
+#Need to walk back to start of new line 
 #Add ability to skip old logs on the first run.
 #Add ability to give first run flag so that the whole log isn't read.
 #Add ability to have single and multi line running modes. 
@@ -29,8 +29,8 @@ class Log
 		puts @file
 		puts @oldFile
 		@exitCode
-		@@max = 10**4
-		@@matchersize = 10**2
+		@@max = 10**3
+		@@matchersize = 10**3
 	end
 	
 	def new?
@@ -60,11 +60,21 @@ class Log
 	#Read the file into the matcher. 
 	def read(matcher)
 		handle = File.new(@file)
+		i = 0
 		handle.sysseek(File.size?(@oldFile).to_i)
 		content = handle.sysread(@@max)
+		counter = @@max - 1
+		for i in 0..(content.size)
+			print content[counter-i]
+			if content[counter-i] == "\n"
+				puts content
+				break
+			end
+		end
+		#content = handle.sysread(@@matchersize-i)
 		puts content
+		puts i
 		result = gets
-		puts '++++++++++++++++++++++++++++++++++++++++++++'
 		handle.sysseek(@@matchersize, IO::SEEK_CUR)
 		File.open(@oldFile, 'a'){|handle| handle.write(content)}
 		puts matcher.match(content)
