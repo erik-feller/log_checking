@@ -4,7 +4,6 @@
 #To Do
 #Need to walk back to start of new line 
 #Add ability to skip old logs on the first run.
-#Add ability to give first run flag so that the whole log isn't read.
 #Add ability to have single and multi line running modes. 
 #Standard format for input into the extension functions. 
 #Done
