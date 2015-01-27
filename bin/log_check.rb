@@ -64,8 +64,10 @@ class Log
 		content = handle.sysread(@@max)
 		counter = @@max - 1
 		for i in 0..(content.size)
-			print content[counter-i]
 			if content[counter-i] == "\n"
+				handle.sysseek(-i, IO::SEEK_CUR) 
+				content = handle.sysread((content.size)-i)
+				#handle.sysseek(0-i, IO::SEEK_CUR)
 				puts content
 				break
 			end
