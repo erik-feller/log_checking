@@ -1,12 +1,12 @@
 #Extensions should be in ../bin and have their config files in ../etc/
-#Version 0.20
+#Version 0.40
 #################################################################################
 #To Do
-#Need to walk back to start of new line 
 #Add ability to skip old logs on the first run.
 #Add ability to have single and multi line running modes. 
 #Standard format for input into the extension functions. 
 #Done
+#I think I have the start of a line thing down. 
 #Can parse through logs and chunk to size
 #Basic functionality, can run matchers for each log selected. Check config in ../etc
 
@@ -67,10 +67,14 @@ class Log
 			if content[counter-i] == "\n"
 				handle.sysseek(-@@max, IO::SEEK_CUR) 
 				content = handle.sysread((content.size)-i)
+				handle.sysseek(0-i, IO::SEEK_CUR)
+				puts content
 				break
 			end
 		end
+		#content = handle.sysread(@@matchersize-i)
 		puts content
+		puts i
 		result = gets
 		handle.sysseek(@@matchersize, IO::SEEK_CUR)
 		File.open(@oldFile, 'a'){|handle| handle.write(content)}
