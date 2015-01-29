@@ -65,16 +65,12 @@ class Log
 		counter = @@max - 1
 		for i in 0..(content.size)
 			if content[counter-i] == "\n"
-				handle.sysseek(-i, IO::SEEK_CUR) 
+				handle.sysseek(-@@max, IO::SEEK_CUR) 
 				content = handle.sysread((content.size)-i)
-				#handle.sysseek(0-i, IO::SEEK_CUR)
-				puts content
 				break
 			end
 		end
-		#content = handle.sysread(@@matchersize-i)
 		puts content
-		puts i
 		result = gets
 		handle.sysseek(@@matchersize, IO::SEEK_CUR)
 		File.open(@oldFile, 'a'){|handle| handle.write(content)}
