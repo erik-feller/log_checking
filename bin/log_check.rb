@@ -2,14 +2,16 @@
 #Version 0.40
 #################################################################################
 #To Do
-#Add ability to skip old logs on the first run.
-#Add ability to have single and multi line running modes. 
-#Standard format for input into the extension functions. 
+#Major improvements
+#-Find a way to compare old and new logs without using a total copy.
+#-This needs to be fast and efficient
+#-After this is done, parse through by line. i.e. a specific no of lines could be requested by a matcher.
+#Minor changes
+#-Add ability to skip old logs on the first run.
+#-Add ability to have single and multi line running modes. 
+#-Standard format for input into the extension functions. 
 #Done
-#I think I have the start of a line thing down. 
-#Can parse through logs and chunk to size
-#Basic functionality, can run matchers for each log selected. Check config in ../etc
-
+#Assume this includes nothing at this point.
 
 #Now include the config and a loop to include the matchers that we need.
 require_relative '../etc/config'
