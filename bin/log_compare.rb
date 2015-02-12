@@ -10,5 +10,5 @@
 #Include file which contains
 check = "log_check.rb"
 #t = system("cksum " + "#{check}" + " | cut -d' ' -f1")
-t = `cksum #{check} | cut -d' ' -f1`
+t = `sha256sum #{check} | cut -d' ' -f1`
 puts t
