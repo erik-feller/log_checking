@@ -1,0 +1,1 @@
+The log class should be used to handle all log files passed in to the function. Any data serialization should theoretically be handled in this class. Then the log class should pass chunks of data to matchers and matchers can decide to parse it by line or some other delimiter. 

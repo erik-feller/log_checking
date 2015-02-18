@@ -6,10 +6,11 @@
 
 require 'digest'
 require 'yaml'
-maxchunk = 1000000
+require_relative '../etc/config.rb'
 
 class Log
-	#Gotta init each instance, cksum and old_offset start at 0 because thats how we know not to attack the whole file
+	#initialize each instance so that the checksum will be the current sum value and the offset will be current size
+	#this ensures that we won't have to attack the entire thing right away. 
 	def initialize(name, location, matchers)
 		@name = name
 		@location = location
@@ -20,7 +21,7 @@ class Log
 	end
 
 	#Function to determine if log has new content or not. This can help to avoid running update unnecessarily
-	det is_new?
+	def is_new?
 		sum = Digest::SHA256.new
 		newfile = File.read(@location)
 		sum.update newfile
@@ -33,7 +34,6 @@ class Log
 	
 	#Now we want to come up with a function to determine if the content of the log has changed 
 	def update
-		#first checks to see if the cksum is even different for any of the programs 
 		sum = Digest::SHA256.new
 	   	newfile = File.read(@location)
 		sum.update newfile	
@@ -63,6 +63,19 @@ class Log
 				end
 			end			
 		end
+	end
+
+	#Function to find the check sum in chunks. Mostly implementing this because I'm worried about memory usage by just streaming through .read() Returns the value of the check sum. Pass in stopping point value. 
+	def chunk_sum(stopp)
+		newfile = File.open(@location)
+		sum = Digest::SHA256.new	
+		offset = 0
+		while offset < stopp
+			chunk = newfile.sysread(MAXCHUNK)
+			sum.update chunk
+			offset += MAXCHUNK
+		end
+		return sum
 	end
 	def serialize
 	end
