@@ -22,40 +22,26 @@ class Log
 
 	#Function to determine if log has new content or not. This can help to avoid running update unnecessarily
 	def is_new?
-		sum = Digest::SHA256.new
-		newfile = File.read(@location)
-		sum.update newfile
-		if sum == @cksum
-			return true
+		if sum == self.chunk_sum(@old_offset)
+			return false 
 		else
-			return false
+			return true
 		end
 	end
 	
 	#Now we want to come up with a function to determine if the content of the log has changed 
 	def update
-		sum = Digest::SHA256.new
-	   	newfile = File.read(@location)
-		sum.update newfile	
-		if sum == @cksum
+		if self.is_new?
 			return
 		else
 			#Now see if the file is smaller than the old offset, then we know it is new
 			if @old_offset > File.size(@location)
 				@old_offset = 0
-				return true
+				return 
 			else
-				#Now compare a checksum of the file against the old one.
+				#Now compare a checksum of the partial file against the old one.
 				#This will be done by building a checksum from the part of the old file behind the new one. 
-				offset = 0
-				newfile = File.open(@location)
-				sum = Digest::SHA256.new
-				while offset < @oldoffset
-					chunk = newfile.sysread(maxchunk)
-					sum.update chunk
-					offset += maxchunk
-				end
-				if sum == @cksum
+				if sum == self.chunk_sum(@old_offset)
 					return
 				else
 					@oldoffset = 0
@@ -77,6 +63,13 @@ class Log
 		end
 		return sum
 	end
+
+	#Function to move the offset to the EOF when the matchers are done reading this particular log. 
+	def done_reading
+		logfile = File.open(@location)
+		@old_offset = File.size(logfile)
+	end
+	#Probably going to take this function out because it will end up being fairly redundant with the YAML built in functions
 	def serialize
 	end
 	def loadfs
