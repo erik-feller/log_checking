@@ -10,7 +10,13 @@ require_relative '../lib/matcher.class.rb'
 require_relative '../etc/config.rb'
 
 #First thing to happen needs to be adding requires for the logs and matchers that we need. Old code can help us with this.
+MATCHERS.each do |location|
+	require_relative MATCHERLOC+location
+end
 
+LOGFILES = Logs.keys
+LOGFILES.each do |log|
+	
 
 #Now we need to load in the hash containing all of the serialized log objects. 
 #Check to see if any new logs are in the list that aren't included in the hash. If there are any initialize them and add them to the hash. 

@@ -15,9 +15,10 @@ class Log
 		@name = name
 		@location = location
 		sum = Digest::SHA256.new
-		@cksum = sum.update @location
+		@cksum = sum.update(@location) 
 		@old_offset = File.size(@location)
-		@matchers = ""
+		#have the matcher class request certain logs. 
+		#@matchers = ""
 	end
 
 	#Function to determine if log has new content or not. This can help to avoid running update unnecessarily
