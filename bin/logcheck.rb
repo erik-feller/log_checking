@@ -14,6 +14,9 @@ MATCHERS.each do |location|
 	require_relative MATCHERLOC+location
 end
 
+#Touch the file which holds log data. Program gets cranky if it isn't there
+`touch ${RECORDS}`
+oldlogs = 
 LOGFILES = Logs.keys
 LOGFILES.each do |log|
 	
