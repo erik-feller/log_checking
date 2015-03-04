@@ -16,9 +16,20 @@ end
 
 #Touch the file which holds log data. Program gets cranky if it isn't there
 `touch ${RECORDS}`
-oldlogs = 
+if File.size(RECORDS) == 0
+	#Create the hash if there isn't one already serialized. 
+	data = Hash.new()
+else
+	#Load the serialized data into the 
+	oldlogs = File.open(RECORDS)
+	data = YAML::load(oldlogs.read())
+end
+
 LOGFILES = Logs.keys
 LOGFILES.each do |log|
+	if data[log]
+	else
+		
 	
 
 #Now we need to load in the hash containing all of the serialized log objects. 
