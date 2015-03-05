@@ -12,5 +12,5 @@ RECORDS = '../etc/logchecking.yaml'
 #define logs and log location
 #Might change this mechanic. All the logs might not be in the same spot
 LOGLOC = '/var/log/'
-LOGS = {'sudo.log' => ['sudomatcher'], }
+LOGS = ['sudo.log', 'kern.log']
 
