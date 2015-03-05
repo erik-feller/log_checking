@@ -11,8 +11,7 @@ require_relative '../etc/config.rb'
 class Log
 	#initialize each instance so that the checksum will be the current sum value and the offset will be current size
 	#this ensures that we won't have to attack the entire thing right away. 
-	def initialize(name, location, matchers)
-		@name = name
+	def initialize(location)
 		@location = location
 		sum = Digest::SHA256.new
 		@cksum = sum.update(@location) 
