@@ -25,12 +25,26 @@ else
 	data = YAML::load(oldlogs.read())
 end
 
-LOGFILES = Logs.keys
-LOGFILES.each do |log|
+LOGS.each do |log|
 	if data[log]
+		#In here do the matchers for the logs that do exist. 
+		cur_log = YAML::load(data[log])
+		#machers and stuffs
+		cur_log.update()
+		data[log] = YAML::dump(cur_log)	#Dump the YAML data for the current log into the hash. 
 	else
+		#Here just initialize the new log and don't worry about back logs. Could be confusing. 
+		cur_log = Log.new(log)
+	end
+end
+
+#Rewind the serialization file and write back into it. 
+oldlogs.rewind()
+oldlogs.truncate(0)
+oldlogs.puts(YAML::dump(data))
 		
-	
+#Housekeeping
+		logs.close()	
 
 #Now we need to load in the hash containing all of the serialized log objects. 
 #Check to see if any new logs are in the list that aren't included in the hash. If there are any initialize them and add them to the hash. 
