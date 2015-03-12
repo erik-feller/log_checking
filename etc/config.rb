@@ -11,6 +11,5 @@ MATCHERS = ['sudomatcher'] #Class defined in these files should have the same na
 RECORDS = '../etc/logchecking.yaml'
 #define logs and log location
 #Might change this mechanic. All the logs might not be in the same spot
-LOGLOC = '/var/log/'
-LOGS = ['sudo.log', 'kern.log']
+LOGS = ['/home/pitserver/erfe5132/Documents/sandbox/log_checking/bin/sudo.log', '/home/pitserver/erfe5132/Documents/sandbox/log_checking/bin/kern.log']
 

@@ -3,7 +3,7 @@
 require 'securerandom'
 `touch testfile`
 
-file = File.open("testfile", 'w')
+file = File.open("testfile", 'a')
 puts("How big should the generated file be?")
 size = gets.chomp
 size = size.to_i

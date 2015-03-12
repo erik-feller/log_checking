@@ -4,7 +4,7 @@
 #
 
 require 'yaml'
-require 'Digest'
+require 'digest'
 require_relative '../lib/log.class.rb'
 require_relative '../lib/matcher.class.rb'
 require_relative '../etc/config.rb'
@@ -14,15 +14,15 @@ MATCHERS.each do |location|
 	require_relative MATCHERLOC+location
 end
 
-#Touch the file which holds log data. Program gets cranky if it isn't there
-`touch ${RECORDS}`
-if File.size(RECORDS) == 0
-	#Create the hash if there isn't one already serialized. 
-	data = Hash.new()
-else
+# which holds log data. Program gets cranky if it isn't there
+if File.exists?(RECORDS)
 	#Load the serialized data into the 
-	oldlogs = File.open(RECORDS)
+	oldlogs = File.open(RECORDS, 'r+')
 	data = YAML::load(oldlogs.read())
+else
+	#Create the hash if there isn't one already serialized. 
+	oldlogs = File.open(RECORDS, 'w+')
+    data = Hash.new()
 end
 
 LOGS.each do |log|
@@ -35,6 +35,7 @@ LOGS.each do |log|
 	else
 		#Here just initialize the new log and don't worry about back logs. Could be confusing. 
 		cur_log = Log.new(log)
+		data[log] = YAML::dump(cur_log)
 	end
 end
 
@@ -44,7 +45,7 @@ oldlogs.truncate(0)
 oldlogs.puts(YAML::dump(data))
 		
 #Housekeeping
-		logs.close()	
+oldlogs.close()	
 
 #Now we need to load in the hash containing all of the serialized log objects. 
 #Check to see if any new logs are in the list that aren't included in the hash. If there are any initialize them and add them to the hash. 
