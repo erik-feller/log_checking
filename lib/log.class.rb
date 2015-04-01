@@ -20,36 +20,47 @@ class Log
 		#@matchers = ""
 	end
 
-	#Function to determine if log has new content or not. This can help to avoid running update unnecessarily
+	#Function to determine if log has new content or not. 
+	#Should not be run outside of the update function.
 	def is_new?
-		if @cksum == self.chunk_sum(@old_offset)
-			puts "logs are the same"
-			return false 
+		if @old_offset > File.size(@location)
+			#File is obviously entirely new
+			puts "file is entirely new"
+			return 1
 		else
-			puts "logs are different"
-			return true
+			if @cksum == self.chunk_sum(@old_offset)
+				if(@old_offset == File.size(@location))
+					puts "logs are the same"
+					return 0 
+				else
+					puts "new part appended to old"
+					return 2
+				end
+			end
 		end
-	end
-	
+	end	
+
 	#Now we want to come up with a function to determine if the content of the log has changed 
 	def update
-		if self.is_new?
-			return
+		retval = self.is_new?
+		case retval
+		when 0
+			#Do nothing the logs are the same. 
+			return -1
+		when 1
+			#pass out a 0, set old_offset to size, update checksum to current value
+			@old_offset = File.size(@location)
+			@cksum = self.chunk_sum(@old_offset)
+			return 0
+		when 2
+			#pass out a 0, set old_offset to size, update checksum to current value
+			offset = @old_offset
+			@old_offset = File.size(@location)
+			@cksum = self.chunk_sum(@old_offset)
+			return offset
 		else
-			#Now see if the file is smaller than the old offset, then we know it is new
-			if @old_offset > File.size(@location)
-				@old_offset = 0
-				return 
-			else
-				#Now compare a checksum of the partial file against the old one.
-				#This will be done by building a checksum from the part of the old file behind the new one. 
-				if @cksum == self.chunk_sum(@old_offset)
-					return
-				else
-					@oldoffset = 0
-					return
-				end
-			end			
+			puts "Some kind of log error:\nInvalid is_new? output."
+			return -2
 		end
 	end
 
@@ -59,8 +70,7 @@ class Log
 		if stopp > File.size(@location)
 			puts "That's not healthy"
 			return -1;
-		end
-		newfile = File.open(@location)
+		end newfile = File.open(@location)
 		sum = Digest::MD5.new	
 		offset = 0
 		while offset < stopp
