@@ -13,18 +13,20 @@ class Log
 	#this ensures that we won't have to attack the entire thing right away. 
 	def initialize(location)
 		@location = location
-		sum = Digest::SHA256.new
-		@cksum = sum.update(@location) 
 		@old_offset = File.size(@location)
+		@cksum = self.chunk_sum(@old_offset)
+		puts @cksum
 		#have the matcher class request certain logs. 
 		#@matchers = ""
 	end
 
 	#Function to determine if log has new content or not. This can help to avoid running update unnecessarily
 	def is_new?
-		if sum == self.chunk_sum(@old_offset)
+		if @cksum == self.chunk_sum(@old_offset)
+			puts "logs are the same"
 			return false 
 		else
+			puts "logs are different"
 			return true
 		end
 	end
@@ -41,7 +43,7 @@ class Log
 			else
 				#Now compare a checksum of the partial file against the old one.
 				#This will be done by building a checksum from the part of the old file behind the new one. 
-				if sum == self.chunk_sum(@old_offset)
+				if @cksum == self.chunk_sum(@old_offset)
 					return
 				else
 					@oldoffset = 0
@@ -53,15 +55,21 @@ class Log
 
 	#Function to find the check sum in chunks. Mostly implementing this because I'm worried about memory usage by just streaming through .read() Returns the value of the check sum. Pass in stopping point value. 
 	def chunk_sum(stopp)
+		#Added protection against reaching past EOF
+		if stopp > File.size(@location)
+			puts "That's not healthy"
+			return -1;
+		end
 		newfile = File.open(@location)
-		sum = Digest::SHA256.new	
+		sum = Digest::MD5.new	
 		offset = 0
 		while offset < stopp
 			chunk = newfile.sysread(MAXCHUNK)
 			sum.update chunk
 			offset += MAXCHUNK
 		end
-		return sum
+		puts sum.hexdigest
+		return sum.hexdigest
 	end
 
 	#Function to move the offset to the EOF when the matchers are done reading this particular log. 
