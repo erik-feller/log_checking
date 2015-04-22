@@ -15,7 +15,7 @@ class Log
 		@location = location
 		@old_offset = File.size(@location)
 		@cksum = self.chunk_sum(@old_offset)
-		puts @cksum
+		@tcksum = 0
 		#have the matcher class request certain logs. 
 		#@matchers = ""
 	end
@@ -23,9 +23,10 @@ class Log
 	#Function to determine if log has new content or not. 
 	#Should not be run outside of the update function.
 	def is_new?
-		if @old_offset > File.size(@location)
+		#puts "entering is new"
+		if (@old_offset > File.size(@location))
 			#File is obviously entirely new
-			puts "file is entirely new"
+			puts "file is entirely new: size smaller"
 			return 1
 		else
 			if @cksum == self.chunk_sum(@old_offset)
@@ -36,12 +37,17 @@ class Log
 					puts "new part appended to old"
 					return 2
 				end
+			else
+				puts "file is entirely new: Checksums are different"
+				return 1
 			end
 		end
+		#puts "this is not good"
 	end	
 
 	#Now we want to come up with a function to determine if the content of the log has changed 
 	def update
+		puts @cksum
 		retval = self.is_new?
 		case retval
 		when 0
@@ -50,13 +56,13 @@ class Log
 		when 1
 			#pass out a 0, set old_offset to size, update checksum to current value
 			@old_offset = File.size(@location)
-			@cksum = self.chunk_sum(@old_offset)
+			@cksum = self.chunk_sum(File.size(@location))
 			return 0
 		when 2
 			#pass out a 0, set old_offset to size, update checksum to current value
 			offset = @old_offset
 			@old_offset = File.size(@location)
-			@cksum = self.chunk_sum(@old_offset)
+			@cksum = self.chunk_sum(File.size(@location))
 			return offset
 		else
 			puts "Some kind of log error:\nInvalid is_new? output."
@@ -70,15 +76,23 @@ class Log
 		if stopp > File.size(@location)
 			puts "That's not healthy"
 			return -1;
-		end newfile = File.open(@location)
+		end 
+		newfile = File.open(@location)
+		newfile.rewind
+		#print "stopping point is " 
+		#puts stopp
+		newfile.rewind
 		sum = Digest::MD5.new	
 		offset = 0
 		while offset < stopp
-			chunk = newfile.sysread(MAXCHUNK)
+			if stopp-offset < MAXCHUNK
+				chunk = newfile.read(stopp-offset)
+			else
+				chunk = newfile.read(MAXCHUNK)
+			end
 			sum.update chunk
 			offset += MAXCHUNK
 		end
-		puts sum.hexdigest
 		return sum.hexdigest
 	end
 
