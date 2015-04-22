@@ -16,8 +16,6 @@ class Log
 		@old_offset = File.size(@location)
 		@cksum = self.chunk_sum(@old_offset)
 		@tcksum = 0
-		#have the matcher class request certain logs. 
-		#@matchers = ""
 	end
 
 	#Function to determine if log has new content or not. 
@@ -42,7 +40,6 @@ class Log
 				return 1
 			end
 		end
-		#puts "this is not good"
 	end	
 
 	#Now we want to come up with a function to determine if the content of the log has changed 
